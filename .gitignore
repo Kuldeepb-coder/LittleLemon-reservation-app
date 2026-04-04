@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+LittleLemon/
+venv/
+.env
+
+# VS Code
+.vscode/
+
+# Database
+db.sqlite3
+
+# OS files
+.DS_Store
+Thumbs.db
