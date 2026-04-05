@@ -1,27 +1,24 @@
-#update URLConf by including URL patterns of restaurant app
 from django.contrib import admin
 from django.urls import path, include
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('restaurant/', include('restaurant.urls'))
-]
-from django.contrib import admin
-from django.urls import path, include
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('restaurant.urls')),
-    path('restaurant/menu/', include('restaurant.urls'))
-]
-
 from rest_framework.routers import DefaultRouter
 from restaurant import views
 
-router = DefaultRouter()
-router.register(r'tables', views.BookingViewSet)
+# Booking router
+booking_router = DefaultRouter()
+booking_router.register(r'', views.BookingViewSet, basename='booking')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('restaurant/booking/', include(router.urls)),
+
+    # API endpoints
+    path('api/', include('restaurant.urls')),       # menu-items, message, token auth, users
+    path('api/booking/', include(booking_router.urls)),  # booking API
+
+    # Browser-friendly routes
+    path('restaurant/menu/', views.MenuItemsView.as_view()),
+    path('restaurant/menu/<int:pk>/', views.SingleMenuItemView.as_view()),
+    path('restaurant/booking/', include(booking_router.urls)),  # booking browser route
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.authtoken')),
+    path('', include('restaurant.urls')),
 ]
